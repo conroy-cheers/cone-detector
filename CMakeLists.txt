@@ -16,10 +16,11 @@ find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(cv_bridge REQUIRED)
+find_package(image_transport REQUIRED)
 
 
 add_executable(cone_detector cone_detector.cpp)
-ament_target_dependencies(cone_detector rclcpp std_msgs sensor_msgs OpenCV cv_bridge)
+ament_target_dependencies(cone_detector rclcpp std_msgs sensor_msgs OpenCV cv_bridge image_transport)
 
 install(TARGETS
         cone_detector
