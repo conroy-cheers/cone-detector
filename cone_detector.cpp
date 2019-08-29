@@ -74,7 +74,7 @@ private:
     cv_bridge::CvImage cv_img_;
 
     rclcpp::TimerBase::SharedPtr timer_;
-    image_transport::Publisher<sensor_msgs::msg::Image>::SharedPtr img_publisher_;
+    image_transport::Publisher::SharedPtr img_publisher_;
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
     size_t count_;
 };
