@@ -8,7 +8,7 @@
 #include "std_msgs/msg/header__struct.hpp"
 #include "sensor_msgs/msg/image.hpp"
 
-#include "image_transport/publisher.h"
+#include "image_transport/image_transport.h"
 #include "cv_bridge/cv_bridge.h"
 
 #include <opencv2/opencv.hpp>
@@ -19,8 +19,8 @@ using namespace std::chrono_literals;
 
 class MinimalPublisher : public rclcpp::Node {
 public:
-    explicit MinimalPublisher(bool const *is_shutdown) : Node("cone_detector"), count_(0) {
-        img_publisher_ = this->create_publisher<sensor_msgs::msg::Image>("image", 10);
+    explicit MinimalPublisher(bool const *is_shutdown) : Node("cone_detector"), image_transport_(shared_from_this()), count_(0) {
+        img_publisher_ = image_transport_.advertise("image", 10);
         publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
         timer_ = this->create_wall_timer(
                 500ms, std::bind(&MinimalPublisher::timer_callback, this));
@@ -45,7 +45,7 @@ public:
             cv_img_.image = frame;
 
             cv_img_.toImageMsg(image_msg_);
-            img_publisher_->publish(image_msg_);
+            img_publisher_.publish(image_msg_);
         }
 
         shutdown();
@@ -74,7 +74,8 @@ private:
     cv_bridge::CvImage cv_img_;
 
     rclcpp::TimerBase::SharedPtr timer_;
-    std::shared_ptr<image_transport::Publisher> img_publisher_;
+    image_transport::ImageTransport image_transport_;
+    image_transport::Publisher img_publisher_;
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
     size_t count_;
 };
