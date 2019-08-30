@@ -19,8 +19,7 @@ using namespace std::chrono_literals;
 
 class MinimalPublisher : public rclcpp::Node {
 public:
-    explicit MinimalPublisher(bool const *is_shutdown) : Node("cone_detector"), image_transport_(shared_from_this()), count_(0) {
-        img_publisher_ = image_transport_.advertise("image", 10);
+    explicit MinimalPublisher(bool const *is_shutdown) : Node("cone_detector"), count_(0) {
         publisher_ = this->create_publisher<std_msgs::msg::String>("topic", 10);
         timer_ = this->create_wall_timer(
                 500ms, std::bind(&MinimalPublisher::timer_callback, this));
@@ -33,6 +32,9 @@ public:
     }
 
     void run() {
+        image_transport::ImageTransport img_transport(shared_from_this());
+        img_publisher_ = img_transport.advertise("image", 10);
+
         while (!*is_shutdown_) {
             cv::Mat frame;
             cap >> frame;
@@ -74,7 +76,6 @@ private:
     cv_bridge::CvImage cv_img_;
 
     rclcpp::TimerBase::SharedPtr timer_;
-    image_transport::ImageTransport image_transport_;
     image_transport::Publisher img_publisher_;
     rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher_;
     size_t count_;
