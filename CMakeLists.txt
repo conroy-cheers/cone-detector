@@ -14,17 +14,24 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(sensor_msgs REQUIRED)
+find_package(wheeliebot_msgs REQUIRED)
 find_package(OpenCV REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(image_transport REQUIRED)
 
 
 add_executable(cone_detector cone_detector.cpp)
-ament_target_dependencies(cone_detector rclcpp std_msgs sensor_msgs OpenCV cv_bridge image_transport)
+ament_target_dependencies(cone_detector rclcpp std_msgs sensor_msgs wheeliebot_msgs OpenCV cv_bridge image_transport)
 
 install(TARGETS
         cone_detector
         DESTINATION lib/${PROJECT_NAME}
+        )
+
+# Install launch files.
+install(DIRECTORY
+        launch
+        DESTINATION share/${PROJECT_NAME}/
         )
 
 ament_package()
