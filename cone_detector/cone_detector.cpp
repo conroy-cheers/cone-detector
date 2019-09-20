@@ -38,7 +38,7 @@ public:
 
     void run() {
         image_transport::ImageTransport img_transport(shared_from_this());
-        img_publisher_ = img_transport.advertise("image", 10);
+        img_publisher_ = img_transport.advertise("robot/image", 10);
 
         cv::SimpleBlobDetector::Params params;
         params.minThreshold = 10;
