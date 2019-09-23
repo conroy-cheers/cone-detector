@@ -15,17 +15,13 @@ def generate_launch_description():
             package='image_transport',
             node_executable='republish',
             node_name='transport_republish',
-            arguments=["compressed", "in:=/in", "raw", "out:=/image"],
+            arguments=["compressed", "in:=/robot/image", "raw", "out:=/image"],
             output='screen'),
-        # launch_ros.actions.Node(
-        #     package='depthimage_to_laserscan',
-        #     node_executable='depthimage_to_laserscan_node',
-        #     node_name='depthimage_to_laserscan_node',
-        #     output='screen',
-        #     parameters=[{'output_frame': output_frame},
-        #                 {'range_min': range_min},
-        #                 {'range_max': range_max}],
-        #     arguments=["depth:=/camera/depth/image_rect_raw",
-        #                "depth_camera_info:=/camera/depth/camera_info",
-        #                "scan:=/scan"]),
+        launch_ros.actions.Node(
+            package='image_tools',
+            node_executable='showimage',
+            node_name='stream_showimage',
+            arguments=[],
+            output='screen'
+        )
     ])
