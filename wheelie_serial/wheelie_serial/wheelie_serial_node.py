@@ -177,6 +177,9 @@ class WheelieSerial(Node):
                                            self.scale_float(msg.twist.linear.x), self.scale_float(msg.twist.angular.z))
             )
         else:
+            self.send_serial_bytes(
+                self.format_serial_message(self.generate_id(), SerialSendMessageType.SET_VELOCITY, 0, 0)
+            )
             self.get_logger().warn('Twist target received, but movement not enabled currently.')
 
     def listener_callback(self, msg):

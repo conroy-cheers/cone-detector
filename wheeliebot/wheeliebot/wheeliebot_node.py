@@ -16,14 +16,14 @@ class WheeliebotState(IntEnum):
 
 class Wheeliebot(Node):
     CONE_X_BASE = 0.6
-    CONE_X_PER_HEIGHT = 0.4
+    CONE_X_PER_AREA = 0.4
     CONE_MIN_HEIGHT = 0.1
-    TRACKING_X_SPEED = 0.3
-    TURN_BEGIN_HEIGHT_THRESHOLD = 0.5
-    TURN_X_SPEED = 0.16
-    TURN_STEER_SPEED = 0.2
+    TRACKING_X_SPEED = 0.08
+    TURN_BEGIN_AREA_THRESHOLD = 0.25
+    TURN_X_SPEED = 0.03
+    TURN_STEER_SPEED = 0.05
 
-    TRACKING_K_P = 0.5
+    TRACKING_K_P = 0.05
 
     def __init__(self):
         super().__init__('wheelie_serial_node')
@@ -81,7 +81,7 @@ class Wheeliebot(Node):
         # a nice cone has been detected
         nicest_cone = nice_cones[0]
 
-        if nicest_cone.height > self.TURN_BEGIN_HEIGHT_THRESHOLD:
+        if nicest_cone.height * nicest_cone.width > self.TURN_BEGIN_AREA_THRESHOLD:
             # start the turn
             self.state = WheeliebotState.TURNING
         else:
