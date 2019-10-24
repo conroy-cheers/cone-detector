@@ -33,6 +33,7 @@ ENV WHEELIE_TRACKING_X_SPEED=0.08
 ENV WHEELIE_TURN_BEGIN_AREA_THRESHOLD=0.25
 ENV WHEELIE_TURN_X_SPEED=0.03
 ENV WHEELIE_TURN_STEER_SPEED=0.05
+ENV WHEELIE_TRACKING_K_P=0.05
 
 CMD ["/bin/bash", "-c", "source install/setup.bash && ros2 launch wheeliebot wheeliebot.launch.py"]
 

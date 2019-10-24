@@ -24,7 +24,7 @@ class Wheeliebot(Node):
     TURN_X_SPEED = float(os.getenv('WHEELIE_TURN_X_SPEED', 0.03))
     TURN_STEER_SPEED = float(os.getenv('WHEELIE_TURN_STEER_SPEED', 0.05))
 
-    TRACKING_K_P = 0.05
+    TRACKING_K_P = float(os.getenv('WHEELIE_TRACKING_K_P', 0.05))
 
     def __init__(self):
         super().__init__('wheelie_serial_node')
