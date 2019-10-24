@@ -1,4 +1,5 @@
 from enum import IntEnum
+import os
 
 import rclpy
 from rclpy.node import Node
@@ -15,13 +16,13 @@ class WheeliebotState(IntEnum):
 
 
 class Wheeliebot(Node):
-    CONE_X_BASE = 0.6
-    CONE_X_PER_AREA = 0.4
-    CONE_MIN_HEIGHT = 0.1
-    TRACKING_X_SPEED = 0.08
-    TURN_BEGIN_AREA_THRESHOLD = 0.25
-    TURN_X_SPEED = 0.03
-    TURN_STEER_SPEED = 0.05
+    CONE_X_BASE = float(os.getenv('WHEELIE_CONE_X_BASE', 0.6))
+    CONE_X_PER_AREA = float(os.getenv('WHEELIE_CONE_X_PER_AREA', 0.4))
+    CONE_MIN_HEIGHT = float(os.getenv('WHEELIE_CONE_MIN_HEIGHT', 0.1))
+    TRACKING_X_SPEED = float(os.getenv('WHEELIE_TRACKING_X_SPEED', 0.08))
+    TURN_BEGIN_AREA_THRESHOLD = float(os.getenv('WHEELIE_TURN_BEGIN_AREA_THRESHOLD', 0.25))
+    TURN_X_SPEED = float(os.getenv('WHEELIE_TURN_X_SPEED', 0.03))
+    TURN_STEER_SPEED = float(os.getenv('WHEELIE_TURN_STEER_SPEED', 0.05))
 
     TRACKING_K_P = 0.05
 
