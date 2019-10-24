@@ -20,4 +20,11 @@ def generate_launch_description():
             arguments=[],
             output='screen'
         ),
+        launch_ros.actions.Node(
+            package='wheelie_serial',
+            node_executable='wheelie_serial_node',
+            node_name='wheelie_serial_node',
+            arguments=[],
+            output='screen'
+        ),
     ])
