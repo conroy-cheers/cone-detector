@@ -3,17 +3,19 @@
 <package format="3">
     <name>wheeliebot</name>
     <version>0.0.1</version>
-    <description>wheeliebot metapackage</description>
+    <description>Main wheeliebot package</description>
     <maintainer email="cheers.conroy@gmail.com">Conroy Cheers</maintainer>
     <license>None</license>
     <author>Conroy Cheers</author>
 
-    <buildtool_depend>ament_cmake</buildtool_depend>
-
-    <exec_depend>cone_detector</exec_depend>
+    <exec_depend>rclpy</exec_depend>
+    <exec_depend>std_msgs</exec_depend>
+    <exec_depend>geometry_msgs</exec_depend>
+    <exec_depend>wheeliebot_msgs</exec_depend>
     <exec_depend>wheelie_serial</exec_depend>
+    <exec_depend>cone_detector</exec_depend>
 
     <export>
-        <build_type>ament_cmake</build_type>
+        <build_type>ament_python</build_type>
     </export>
 </package>
