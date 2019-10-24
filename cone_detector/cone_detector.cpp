@@ -26,8 +26,8 @@ int high_H = 150 / 2, high_S = max_value, high_V = max_value;
 
 class MinimalPublisher : public rclcpp::Node {
 public:
-    const int SCALED_WIDTH = 80;
-    const int SCALED_HEIGHT = 60;
+    const int SCALED_WIDTH = 120;
+    const int SCALED_HEIGHT = 90;
 
     explicit MinimalPublisher(bool const *is_shutdown) : Node("cone_detector"), count_(0) {
         publisher_ = this->create_publisher<wheeliebot_msgs::msg::Detections2D>("~/detections", 10);
