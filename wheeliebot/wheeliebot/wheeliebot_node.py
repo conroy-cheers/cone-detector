@@ -88,7 +88,7 @@ class Wheeliebot(Node):
         else:
             # keep the nicest cone at the target X position
             self.state = WheeliebotState.TRACKING
-            self._tracking_target_x = self.CONE_X_BASE + self.CONE_X_PER_HEIGHT * nicest_cone.height
+            self._tracking_target_x = self.CONE_X_BASE + self.CONE_X_PER_AREA * (nicest_cone.height * nicest_cone.width)
             self._tracking_current_x = nicest_cone.x
 
 
