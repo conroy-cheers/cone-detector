@@ -25,5 +25,5 @@ ADD . src/
 RUN source install/setup.bash && colcon build --packages-select cone_detector wheelie_serial wheeliebot_msgs wheeliebot
 
 ENV ROS_DOMAIN_ID=42
-CMD ["/bin/bash", "-c", "source install/setup.bash && ros2 run wheelie_serial wheelie_serial_node"]
+CMD ["/bin/bash", "-c", "source install/setup.bash && ros2 launch wheeliebot wheeliebot.launch.py"]
 
