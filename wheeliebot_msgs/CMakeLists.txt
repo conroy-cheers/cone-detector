@@ -17,6 +17,7 @@ find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
 set(msg_files
+	"msg/Detection.msg"
         "msg/Detections2D.msg"
         )
 rosidl_generate_interfaces(${PROJECT_NAME}

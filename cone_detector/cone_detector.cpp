@@ -7,6 +7,7 @@
 #include "std_msgs/msg/string.hpp"
 #include "std_msgs/msg/header__struct.hpp"
 #include "sensor_msgs/msg/image.hpp"
+#include "wheeliebot_msgs/msg/detection.hpp"
 #include "wheeliebot_msgs/msg/detections2_d.hpp"
 
 #include "image_transport/image_transport.h"
@@ -25,8 +26,11 @@ int high_H = 150 / 2, high_S = max_value, high_V = max_value;
 
 class MinimalPublisher : public rclcpp::Node {
 public:
+    const int SCALED_WIDTH = 80;
+    const int SCALED_HEIGHT = 60;
+
     explicit MinimalPublisher(bool const *is_shutdown) : Node("cone_detector"), count_(0) {
-        publisher_ = this->create_publisher<wheeliebot_msgs::msg::Detections2D>("topic", 10);
+        publisher_ = this->create_publisher<wheeliebot_msgs::msg::Detections2D>("~/detections", 10);
         is_shutdown_ = is_shutdown;
 
         cv_img_.encoding = "bgr8";
@@ -38,7 +42,7 @@ public:
 
     void run() {
         image_transport::ImageTransport img_transport(shared_from_this());
-        img_publisher_ = img_transport.advertise("robot/image", 10);
+        img_publisher_ = img_transport.advertise("~/image", 10);
 
         const int erosion_size = 3;
         const int dilation_size = 2;
@@ -65,7 +69,7 @@ public:
 
             auto t1 = std::chrono::high_resolution_clock::now();
 
-            cv::resize(input_frame, frame, cv::Size(80, 60), 0, 0, cv::INTER_LINEAR);
+            cv::resize(input_frame, frame, cv::Size(SCALED_WIDTH, SCALED_HEIGHT), 0, 0, cv::INTER_LINEAR);
 
             cv::cvtColor(frame, frame_HSV, cv::COLOR_BGR2HSV);
             cv::inRange(frame_HSV, cv::Scalar(low_H, low_S, low_V), cv::Scalar(high_H, high_S, high_V),
@@ -112,9 +116,25 @@ public:
                 cv::drawContours(merged_output, contours, largest_contour_index, cv::Scalar(0, 0, 255), CV_FILLED, 8,
                                  hierarchy);
             }
+
+            detections_msg_.detections.clear();
             for (auto &rect: bounding_rects) {
                 cv::rectangle(merged_output, rect, cv::Scalar(0, 255, 0), 2);
+
+                // add to message
+                wheeliebot_msgs::msg::Detection det;
+
+                det.height = (double) rect.height / (double) SCALED_HEIGHT;
+                det.width = (double) rect.width / (double) SCALED_WIDTH;
+                det.x = (double) (rect.x + (rect.width / 2)) / (double) SCALED_WIDTH;
+                det.y = 1 - ((double) (rect.y + (rect.height / 2)) / (double) SCALED_HEIGHT);
+                // y axis is flipped to start x,y from lower left corner
+
+                detections_msg_.detections.emplace_back(det);
             }
+            detections_msg_.header.stamp = this->now();
+            detections_msg_.header.frame_id = "";
+            publisher_->publish(detections_msg_);
 
             auto t2 = std::chrono::high_resolution_clock::now();
             fps = 1000000000 / std::chrono::duration_cast<std::chrono::nanoseconds>(t2 - t1).count();
@@ -152,6 +172,7 @@ private:
 
     image_transport::Publisher img_publisher_;
     rclcpp::Publisher<wheeliebot_msgs::msg::Detections2D>::SharedPtr publisher_;
+    wheeliebot_msgs::msg::Detections2D detections_msg_;
     size_t count_;
 };
 
