@@ -25,15 +25,7 @@ ADD . src/
 RUN source install/setup.bash && colcon build --packages-select cone_detector wheelie_serial wheeliebot_msgs wheeliebot
 
 ENV ROS_DOMAIN_ID=42
+ADD wheeliebot_env.sh ./
 
-ENV WHEELIE_CONE_X_BASE=0.6
-ENV WHEELIE_CONE_X_PER_AREA=0.4
-ENV WHEELIE_CONE_MIN_HEIGHT=0.1
-ENV WHEELIE_TRACKING_X_SPEED=0.08
-ENV WHEELIE_TURN_BEGIN_AREA_THRESHOLD=0.25
-ENV WHEELIE_TURN_X_SPEED=0.03
-ENV WHEELIE_TURN_STEER_SPEED=0.05
-ENV WHEELIE_TRACKING_K_P=0.05
-
-CMD ["/bin/bash", "-c", "source install/setup.bash && ros2 launch wheeliebot wheeliebot.launch.py"]
+CMD ["/bin/bash", "-c", "source install/setup.bash && source wheeliebot_env.sh && ros2 launch wheeliebot wheeliebot.launch.py"]
 
